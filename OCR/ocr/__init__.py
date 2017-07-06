@@ -1,4 +1,4 @@
-import pyocr
+import OCR.ocr.pyocr
 import numpy as np
 import cv2
 import subprocess

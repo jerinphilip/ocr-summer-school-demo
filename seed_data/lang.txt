@@ -1,1 +1,3 @@
 ml,Malayalam
+hi,Hindi
+sk,Sanskrit

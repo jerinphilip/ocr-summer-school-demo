@@ -1,5 +1,5 @@
 import cv2
-from ocr import GravesOCR
+from .ocr import GravesOCR
 import os
 import subprocess
 import numpy as np
@@ -27,8 +27,10 @@ def segmentation(image):
     folder = '/home/solomon/jlayoutV1/codes/'
     binary = folder + '/j-layout'
     command = "%s %s -psm %d"%(binary, image, 6)
-    subprocess.call(command, shell=True)
     segmentation_filename = str(image)+'.lines.txt'
+    if os.path.exists(segmentation_filename):
+        os.remove(segmentation_filename)
+    subprocess.call(command, shell=True)
     segmentation_file = open(segmentation_filename)
     extract = lambda x: list(map(int, x.strip().split()))
     bboxes = map(extract, segmentation_file)
@@ -41,17 +43,22 @@ def segmentation(image):
 
 def OCR(image, language):
     line_images = segmentation(image)
-    images=[]
+    print(len(line_images))
     param_folder = '/home/solomon/ss-demo/OCR/parameters'
     model = "%s/models/%s.xml"%(param_folder, language)
     lookup = "%s/lookups/%s.txt"%(param_folder, language)
     
     ocr = GravesOCR(model, lookup)
     
-    for each_image in line_images:
-        images.extend(each_image)
-
-    predictions = [ocr.recognize(image) for image in images]
-    return '\n'.join(predictions)
+    #for each_image in line_images:
+    #    images.extend(each_image)
+    
+    print("Loaded trainer")
+    results = []
+    for count, image in enumerate(line_images):
+        print("Recognizing ", count)
+        results.append(ocr.recognize(image))
+    
+    return '\n'.join(results)
     
 

@@ -2,13 +2,15 @@
 <html>
   <head>
     {% block head %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
         <title> OCR-Demo > {% block title %} {% endblock %} </title>
     {% endblock %}
   </head>
   <body>
     <div class="container">
+        <h1><a href="/" style="text-decoration:none;">OCR Demo </a></h1>
         {% block content %}
 
         {% endblock %}
