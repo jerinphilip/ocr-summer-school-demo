@@ -44,3 +44,16 @@ class GravesOCR:
         cps = self.test(sequence)
         chars = list(map(lambda x: self.stringToUnicode(x), cps))
         return ''.join(chars)
+
+    def stringToUnicode(self, ocr_output):
+        codepoint = ocr_output[1:]
+        codepoint_value = int(codepoint, 16)
+        return chr(codepoint_value)
+
+    def unicodeToClasses(self, string):
+        try:
+          return list(map(lambda x: self.table[x], string))
+        except KeyError as e:
+          print(e)
+          pass
+
