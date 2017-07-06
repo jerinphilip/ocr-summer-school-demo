@@ -8,11 +8,16 @@ from OCR import OCR
 
 #sys.path.insert(0, '.')
 
+from util import make_celery
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///save.db'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['CELERY_BROKER_URL'] ='redis://localhost:6379'
+app.config['CELERY_RESULT_BACKEND']='redis://localhost:6379'
 db = SQLAlchemy(app)
+celery = make_celery(app)
 
 def fresh_name(name, ext):
     return sha224(name)[:20] + '.ext'
@@ -62,11 +67,13 @@ def image_upload():
             image_object = Image(code=lang, fname=fname)
             db.session.add(image_object)
             db.session.commit()
-            text = OCR(floc, lang)  
-            output_object = Output(image=image_object.id, output=text)
-            db.session.add(output_object)
-            db.session.commit()
-            return render_template('output.html', output=output_object, image=image_object)
+            # text = OCR(floc, lang)  
+            # output_object = Output(image=image_object.id, output=text)
+            # db.session.add(output_object)
+            # db.session.commit()
+            # return render_template('output.html', output=output_object, image=image_object)
+            process_image.delay(floc, lang, image_object.id)
+            return redirect(url_for('index'))
 
 @app.route('/result/<output_id>', methods=['GET'])
 def result(output_id):
@@ -76,10 +83,25 @@ def result(output_id):
 
 @app.route('/view', methods=['GET'])
 def view_queue():
-    images = Image.query.all()
-    return render_template('gallery.html', images=images)
+    outputs = Output.query.all()
+    completed = []
+    for entry in outputs:
+        img = Image.query.get(entry.image)
+        pair = (img.fname, entry.output, entry.id)
+        completed.append(pair)
+    pending = Image.query.filter_by(processed=False).all()
+    return render_template('gallery.html', completed=completed, pending=pending)
 
 
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+@celery.task()
+def process_image(image_path, language, image_id):
+    image_object = Image.query.get(image_id)
+    text = OCR(image_path, language)
+    output_object = Output(image=image_object.id, output=text)
+    image_object.processed = True
+    db.session.add(output_object)
+    db.session.commit()

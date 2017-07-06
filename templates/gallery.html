@@ -2,11 +2,23 @@
 {% block title %} Gallery {% endblock %}
 
 {% block content %}
-    {% for image in images %}
-    <h5> {{ image.fname }} </h5> 
-    <div style="display:none;">
-        <img src="{{ url_for('download_file', filename=image.fname) }}"/>
+    <div class="row">
+        <div class="six columns">
+            <h4>Completed</h4>
+            <ol>
+            {% for img, text, id in completed %}
+                <li><a href="{{ url_for("result", output_id=id)}}">{{img}}</a></li>
+            {% endfor %}
+            </ol>
+        </div>
+        <div class="six columns">
+            <h4>Pending</h4>
+            <ol>
+            {% for img in pending %}    
+                <li>{{ img.fname }}</li>
+            {% endfor %}
+            </ol>
+        </div>
     </div>
-    {% endfor %}
 {% endblock %}
 
