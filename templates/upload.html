@@ -15,8 +15,9 @@
                 <div class="row">
                     <div class="eight columns">
                         <select name="lang">
-                            <option>Malayalam</option>
-                            <option>Hindi</option>
+                            {% for lang in langs %}
+                                <option>{{ lang.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="four columns">

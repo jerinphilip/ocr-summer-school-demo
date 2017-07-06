@@ -24,7 +24,7 @@ def download_file(filename):
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(10), db.ForeignKey('language.code'))
+    code = db.Column(db.String(10), db.ForeignKey('language.name'))
     fname = db.Column(db.Text)
     processed = db.Column(db.Boolean, default=False)
 
@@ -37,13 +37,13 @@ class Output(db.Model):
         return "{image: %s, output: %s}"%(self.image, self.output)
 
 class Language(db.Model):
-    name = db.Column(db.String(80))
-    code = db.Column(db.String(10), primary_key=True)
+    name = db.Column(db.String(80), primary_key=True)
 
 @app.route('/enqueue', methods=['GET', 'POST'])
 def image_upload():
     if request.method == 'GET':
-        return render_template('upload.html')
+        langs = Language.query.all()
+        return render_template('upload.html', langs=langs)
     else:
         if 'input_image' not in request.files:
             flash("No file upload found!")
@@ -74,10 +74,11 @@ def result(output_id):
     image = Image.query.get(output.image)
     return render_template('output.html', output=output, image=image)
 
-@app.route('/queue', methods=['GET'])
+@app.route('/view', methods=['GET'])
 def view_queue():
     images = Image.query.all()
     return render_template('gallery.html', images=images)
+
 
 @app.route('/', methods=['GET'])
 def index():

@@ -8,8 +8,8 @@ def seed_lang():
     with open("seed_data/lang.txt") as fp:
         langs = fp.read().splitlines()
         for pair in langs:
-            lang, code = pair.split(',')
-            lang_object = Language(name=lang, code=code)
+            code, lang = pair.split(',')
+            lang_object = Language(name=lang)
             db.session.add(lang_object)
 
 if __name__ == '__main__':

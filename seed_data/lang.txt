@@ -1,3 +1,15 @@
-ml,Malayalam
+am,Assamese
+bl,Bangla
+en,English
+gj,Gujarati
+gm,Gurumukhi
 hi,Hindi
+kn,Kannada
+ml,Malayalam
+mp,Manipuri
+mr,Marathi
+or,Oriya
 sk,Sanskrit
+ta,Tamil
+te,Telugu
+ur,Urdu
