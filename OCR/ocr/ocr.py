@@ -1,7 +1,6 @@
 import pyocr
 import numpy as np
 import cv2
-import subprocess
 
 class GravesOCR:
     def __init__(self, weights_f, lookup_f):

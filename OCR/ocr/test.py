@@ -16,10 +16,10 @@ def display_img(inputs):
     cv2.waitKey(0)
 
 ocr = GravesOCR(
-        "../etc/cvit_ocr_weights.xml",  # Weights file
-        "../etc/lookup.txt")
+        "../../etc/cvit_ocr_weights.xml",  # Weights file
+        "../../etc/lookup.txt")
 
-inputs = list(map(float, open("../etc/input.txt").read().strip().split()))
+inputs = list(map(float, open("../../etc/input.txt").read().strip().split()))
 
 print(inputs, len(inputs))
 recognized = ocr.test(inputs)
@@ -30,11 +30,11 @@ sequences = [inputs]
 targets = [[84, 38, 12]]
 
 
-errors = ocr.train(sequences, targets)
+#errors = ocr.train(sequences, targets)
 #print(ocr.export())
 
-for i in range(len(errors)):
-    print("Error %d: %lf"%(i+1, errors[i]))
+#for i in range(len(errors)):
+#    print("Error %d: %lf"%(i+1, errors[i]))
 
 #print(sequences[0])
 print(inputs, len(inputs))

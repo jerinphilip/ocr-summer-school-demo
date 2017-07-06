@@ -748,6 +748,9 @@ class NetAPI(_object):
     def train(self, arg2, arg3):
         return _pyocr.NetAPI_train(self, arg2, arg3)
 
+    def train2(self, arg2, arg3, arg4):
+        return _pyocr.NetAPI_train2(self, arg2, arg3, arg4)
+
     def exportModel(self):
         return _pyocr.NetAPI_exportModel(self)
     __swig_destroy__ = _pyocr.delete_NetAPI
