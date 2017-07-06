@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %} Upload File {% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="input_image" accept="image/*">
+        <select name="lang">
+            <option>Malayalam</option>
+            <option>Hindi</option>
+        </select>
+        <input type="submit">
+    </form>
+{% endblock %}
+
